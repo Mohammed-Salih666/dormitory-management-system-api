@@ -8,6 +8,7 @@ export const users = mysqlTable('users',{
   email: varchar('email', { length: 255 }).unique().notNull(),
   image: varchar('image', { length: 255 }).notNull(),
   role: varchar('role', { length: 255 }).notNull().default('resident'),
+  gender: boolean('gender').notNull().default(true), //true = male, false = female
   has_deposit: boolean('has_deposit').notNull().default(false),
   created_at: timestamp('created_at').notNull().defaultNow(),
   updated_at: timestamp('updated_at').notNull().defaultNow(),
@@ -41,7 +42,7 @@ export const rooms = mysqlTable('rooms', {
   apartment_id: int('apartment_id')
     .references(() => apartments.id)
     .notNull(), 
-  room_number: varchar('room_number', { length: 2 }).notNull(),
+  room_number: varchar('room_number', { length: 3 }).notNull(),
   is_available: boolean('is_available').notNull().default(true),
   created_at: timestamp('created_at').notNull().defaultNow(),
   updated_at: timestamp('updated_at').notNull().defaultNow(),
