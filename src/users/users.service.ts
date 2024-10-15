@@ -50,7 +50,7 @@ export class UsersService {
 
   async update(id: number, dto: UpdateUserDto) {
     await this.db
-      .update(schema.apartments)
+      .update(users)
       .set({
         ...dto,
         updated_at: new Date(),
