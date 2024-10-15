@@ -5,9 +5,9 @@ export default defineConfig({
   out: './src/database/migrations',
   dialect: 'mysql', 
   dbCredentials: {
-    host: process.env.DATABASE_HOST || "",
-    user: process.env.DATABASE_USERNAME || "",
-    password: process.env.DATABASE_PASSWORD || "",
-    database: process.env.DATABASE_NAME || "",
+    host: process.env.DB_HOST || "",
+    user: process.env.DB_USERNAME || "",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "",
   },
 });
