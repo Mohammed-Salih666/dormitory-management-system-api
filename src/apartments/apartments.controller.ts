@@ -9,7 +9,7 @@ export class ApartmentsController {
   ) {}
 
   @Get()
-  async findAll(@Query('gender') gender: string) { 
+  async findAll(@Query('gender') gender: string = 'M') { 
     const forMale = gender === 'M' ? true : false; 
 
     return this.apartmentService.findAll(forMale);
@@ -42,7 +42,7 @@ export class ApartmentsController {
     return this.apartmentService.update(floor, +number, dto);
   }
 
-  @Delete(':floor/:number/remove')
+  @Delete(':floor/:number/delete')
   async remove(@Param('floor') floor: string, @Param('number') number: string) {
     return this.apartmentService.remove(floor, +number); 
   }
