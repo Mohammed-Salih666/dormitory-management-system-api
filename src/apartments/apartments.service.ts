@@ -69,9 +69,28 @@ export class ApartmentsService {
   }
 
   async create(dto: CreateApartmentDto) {
-    await this.db
+    const roomsCount = dto.apartment_type === "standard" ? 4
+                        : dto.apartment_type === "economy" ? 6
+                        : 1 //private
+
+    
+    let roomLetter = 'A'; 
+
+    await this.db.transaction(async (tx) => {
+      const [result] = await tx
       .insert(apartments)
       .values(dto); 
+
+      for (let i =0; i < roomsCount; i++) {
+        await tx
+          .insert(schema.rooms)
+          .values({
+            apartment_id: result.insertId, 
+            room_number: roomLetter
+          }); 
+        roomLetter = String.fromCharCode(roomLetter.charCodeAt(0)+1)
+      }
+    }); 
 
     return {
       message: "Apartment Created",
