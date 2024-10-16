@@ -9,17 +9,34 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
+  /**
+   * Constructor for the UsersService class.
+   * 
+   * @param db The MySql2Database instance for database operations.
+   */
   constructor(
     @Inject(MYSQL_CONNECTION)
     private readonly db: MySql2Database<typeof schema>, 
   ){}
 
+
+  /**
+   * Retrieves all users from the database.
+   * 
+   * @returns An array of all users in the database.
+   */
   async findAll() {
     const allUsers = await this.db.select().from(users); 
 
     return allUsers; 
   }
 
+/**
+ * Retrieves a user based on the provided user ID.
+ * 
+ * @param id The ID of the user to retrieve.
+ * @returns The user matching the specified ID.
+ */
   async findOne(id: number) {
     const user = await this.db
       .select()
@@ -29,6 +46,12 @@ export class UsersService {
     return user; 
   }
 
+  /**
+   * Retrieves a user based on the provided university ID.
+   * 
+   * @param uniId The university ID of the user to retrieve.
+   * @returns The user matching the specified university ID.
+   */
   async findByUniId(uniId: string) {
     const user = await this.db
       .select()
@@ -38,6 +61,12 @@ export class UsersService {
     return user; 
   }
 
+  /**
+   * Creates a new user based on the provided CreateUserDto.
+   * 
+   * @param dto The CreateUserDto containing user details.
+   * @returns An object with a message indicating the user creation status.
+   */
   async create(dto: CreateUserDto) {
     await this.db
       .insert(users)
@@ -48,6 +77,14 @@ export class UsersService {
     }
   }
 
+  /**
+   * Updates an existing user based on the provided UpdateUserDto.
+   * Only updates the fields that are provided in the dto.
+   * 
+   * @param id The ID of the user to update.
+   * @param dto The UpdateUserDto containing the updated user details.
+   * @returns An object with a message indicating the user update status.
+   */
   async update(id: number, dto: UpdateUserDto) {
     await this.db
       .update(users)
