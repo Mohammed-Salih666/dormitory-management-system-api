@@ -19,7 +19,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db-generate": "npx drizzle-kit generate",
-    "db-migrate": "npx drizzle-kit migrate"
+    "db-migrate": "npx drizzle-kit migrate",
+    "docs": "npx @compodoc/compodoc -p tsconfig.json -s"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -35,6 +36,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.26",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
