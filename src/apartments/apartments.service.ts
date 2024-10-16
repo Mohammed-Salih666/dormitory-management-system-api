@@ -7,12 +7,22 @@ import { and, eq } from 'drizzle-orm';
 import { CreateApartmentDto } from './dto/create-apartment.dto';
 @Injectable()
 export class ApartmentsService {
+/**
+ * Constructor for the ApartmentsService class.
+ * 
+ * @param db The MySql2Database instance for database operations.
+ */
   constructor(
     @Inject(MYSQL_CONNECTION)
     private readonly db: MySql2Database<typeof schema>, 
   ){}
 
   async findAll(forMale: boolean) {
+  /**
+   * Retrieves all apartments for the given gender.
+   * @param forMale Whether the apartments are for males or not.
+   * @returns An array of all apartments for the given gender.
+   */
     const allApartments = await this.db
       .select()
       .from(apartments)
@@ -24,6 +34,14 @@ export class ApartmentsService {
   }
 
   
+  /**
+   * Retrieves a specific apartment based on floor, apartment number, and gender preference.
+   * 
+   * @param floor The floor on which the apartment is located.
+   * @param apartmentNumber The specific number of the apartment.
+   * @param forMale A boolean indicating if the apartment is for males.
+   * @returns The apartment matching the specified criteria.
+   */
   async findOne(floor: string, apartmentNumber: number, forMale: boolean) {
     const apartment = await this.db
     .select()
@@ -39,6 +57,13 @@ export class ApartmentsService {
     return apartment; 
   }
   
+  /**
+   * Retrieves all rooms for a given apartment.
+   * 
+   * @param floor The floor on which the apartment is located.
+   * @param number The specific number of the apartment.
+   * @returns An array of all rooms in the given apartment.
+   */
   async findRoomsByApartment(floor: string, number: number) {
     const condition = and(
       eq(apartments.floor, floor),
@@ -55,6 +80,12 @@ export class ApartmentsService {
     return rooms;
   }
 
+  /**
+   * Retrieves all available rooms for the given gender.
+   * 
+   * @param gender A boolean indicating if the rooms are for males.
+   * @returns An array of all available rooms for the given gender.
+   */
   async findAvailableRooms(gender: boolean) {
     const rooms = await this.db.query.apartments.findMany({
       where: eq(apartments.for_male, gender),
@@ -68,9 +99,17 @@ export class ApartmentsService {
     return rooms; 
   }
 
+/**
+ * Creates a new apartment based on the provided CreateApartmentDto.
+ * The number of rooms is determined by the apartment type.
+ * Each room is assigned a unique room number starting from 'A'.
+ * 
+ * @param dto The CreateApartmentDto containing apartment details.
+ * @returns An object with a message indicating the apartment creation status.
+ */
   async create(dto: CreateApartmentDto) {
-    const roomsCount = dto.apartment_type === "standard" ? 4
-                        : dto.apartment_type === "economy" ? 6
+    const roomsCount = dto.apartment_type === "standard" ? 2
+                        : dto.apartment_type === "economy" ? 3
                         : 1 //private
 
     
@@ -97,6 +136,16 @@ export class ApartmentsService {
     }
   }
 
+
+  /**
+   * Updates an existing apartment based on the provided Partial<CreateApartmentDto>.
+   * Only updates the fields that are provided in the dto.
+   * 
+   * @param floor The floor on which the apartment is located.
+   * @param apartmentNumber The specific number of the apartment.
+   * @param dto The Partial<CreateApartmentDto> containing the updated apartment details.
+   * @returns An object with a message indicating the apartment update status.
+   */
   async update(floor: string, apartmentNumber: number, dto: Partial<CreateApartmentDto>) {
     await this.db
       .update(apartments)
@@ -116,6 +165,13 @@ export class ApartmentsService {
     }
   }
 
+  /**
+   * Removes an existing apartment based on the provided floor and apartment number.
+   * 
+   * @param floor The floor on which the apartment is located.
+   * @param apartmentNumber The specific number of the apartment.
+   * @returns An object with a message indicating the apartment removal status.
+   */
   async remove(floor: string, apartmentNumber: number){
     await this.db
       .delete(apartments)
