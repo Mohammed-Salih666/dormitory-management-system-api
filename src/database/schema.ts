@@ -87,4 +87,11 @@ export const inspections = mysqlTable('inspections', {
   created_at: timestamp('created_at').notNull().defaultNow(),
   updated_at: timestamp('updated_at').notNull().defaultNow(),
   deleted_at: timestamp('deleted_at')
-})
+}); 
+
+export const inspectionsRelations = relations(inspections, ({one}) => ({
+  reservation: one(reservations, {
+    fields: [inspections.reservation_id],
+    references: [reservations.id]
+  })
+}))
