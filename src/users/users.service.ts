@@ -104,7 +104,6 @@ export class UsersService {
       .update(users)
       .set({
         deleted_at: new Date(), 
-        updated_at: new Date(),
       })
       .where(eq(users.id, id)); 
 

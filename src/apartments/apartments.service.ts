@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { MYSQL_CONNECTION } from 'src/constants';
 import * as schema from '../database/schema';
 import { apartments } from '../database/schema';
@@ -166,21 +166,33 @@ export class ApartmentsService {
   }
 
   /**
-   * Removes an existing apartment based on the provided floor and apartment number.
+   * Removes an existing apartment based on the provided floor and apartment number. Also deletes the associated rooms.
    * 
    * @param floor The floor on which the apartment is located.
    * @param apartmentNumber The specific number of the apartment.
    * @returns An object with a message indicating the apartment removal status.
    */
   async remove(floor: string, apartmentNumber: number){
-    await this.db
-      .delete(apartments)
-      .where(
-        and(
+
+    await this.db.transaction(async (tx) => {
+      const apartment = await tx.query.apartments.findFirst({
+        where: and(
           eq(apartments.floor, floor),
           eq(apartments.number, apartmentNumber),
-        )
-      ); 
+        ),
+        with: {
+          rooms: true,
+        }
+      });
+  
+      if(!apartment) throw new HttpException("Apartment Not Found", 404);
+  
+      apartment.rooms.forEach(async (room) => {
+        await tx.delete(schema.rooms).where(eq(schema.rooms.id, room.id));
+      })
+  
+      await tx.delete(apartments).where(eq(apartments.id, apartment.id));
+    })
 
     return {
       message: "Apartment Removed",

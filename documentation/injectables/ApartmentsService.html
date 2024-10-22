@@ -872,7 +872,7 @@ Only updates the fields that are provided in the dto.</p>
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Inject, Injectable } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpException, Inject, Injectable } from &#x27;@nestjs/common&#x27;;
 import { MYSQL_CONNECTION } from &#x27;src/constants&#x27;;
 import * as schema from &#x27;../database/schema&#x27;;
 import { apartments } from &#x27;../database/schema&#x27;;
@@ -1047,14 +1047,32 @@ export class ApartmentsService {
    * @returns An object with a message indicating the apartment removal status.
    */
   async remove(floor: string, apartmentNumber: number){
-    await this.db
-      .delete(apartments)
-      .where(
-        and(
-          eq(apartments.floor, floor),
-          eq(apartments.number, apartmentNumber),
-        )
-      ); 
+
+    const apartment &#x3D; await this.db.query.apartments.findFirst({
+      where: and(
+        eq(apartments.floor, floor),
+        eq(apartments.number, apartmentNumber),
+      ),
+      with: {
+        rooms: true,
+      }
+    });
+
+    if(!apartment) throw new HttpException(&quot;Apartment Not Found&quot;, 404);
+
+    for(let i&#x3D;0; i &lt; apartment.rooms.length; i++) {
+      await this.db.delete(schema.rooms).where(eq(schema.rooms.id, apartment.rooms[i].id));
+    }
+    await this.db.delete(apartments).where(eq(apartments.id, apartment.id));
+
+    // await this.db
+    //   .delete(apartments)
+    //   .where(
+    //     and(
+    //       eq(apartments.floor, floor),
+    //       eq(apartments.number, apartmentNumber),
+    //     )
+    //   ); 
 
     return {
       message: &quot;Apartment Removed&quot;,

@@ -779,14 +779,15 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    await this.db
-      .update(users)
-      .set({
-        deleted_at: new Date(), 
-        updated_at: new Date(),
-      })
-      .where(eq(users.id, id)); 
+    // await this.db
+    //   .update(users)
+    //   .set({
+    //     deleted_at: new Date(), 
+    //     updated_at: new Date(),
+    //   })
+    //   .where(eq(users.id, id)); 
 
+    await this.db.delete(users).where(eq(users.id, id));
     return {
       message: &quot;User Removed&quot;,
     }
