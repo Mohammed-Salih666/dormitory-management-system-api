@@ -15,13 +15,13 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get('id/:id')
   async findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
 
-  @Get()
-  async findByUniId(@Query('uniId') id: string) {
+  @Get('uni_id/:uniId')
+  async findByUniId(@Param('uniId') id: string) {
     return this.userService.findByUniId(id);
   }
 
