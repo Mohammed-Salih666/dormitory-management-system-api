@@ -8,6 +8,13 @@
       "when": 1728986914119,
       "tag": "0000_little_mother_askani",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1730360570124,
+      "tag": "0001_complete_fenris",
+      "breakpoints": true
     }
   ]
 }

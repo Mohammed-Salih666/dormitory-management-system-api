@@ -3,7 +3,7 @@ import { MySql2Database } from 'drizzle-orm/mysql2';
 import { MYSQL_CONNECTION } from 'src/constants';
 import * as schema from '../database/schema';
 import { users } from '../database/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -26,7 +26,7 @@ export class UsersService {
    * @returns An array of all users in the database.
    */
   async findAll() {
-    const allUsers = await this.db.select().from(users); 
+    const allUsers = await this.db.select().from(users).where(isNull(users.deleted_at)); 
 
     return allUsers; 
   }
@@ -41,7 +41,10 @@ export class UsersService {
     const user = await this.db
       .select()
       .from(users)
-      .where(eq(users.id, id)); 
+      .where(and(
+        eq(users.id, id),
+        isNull(users.deleted_at),
+      )); 
 
     return user; 
   }
@@ -53,10 +56,14 @@ export class UsersService {
    * @returns The user matching the specified university ID.
    */
   async findByUniId(uniId: string) {
-    const user = await this.db
+    const [user] = await this.db
       .select()
       .from(users)
-      .where(eq(users.uni_id, uniId)); 
+      .where(and(
+        eq(users.uni_id, uniId),
+        isNull(users.deleted_at),
+      ))
+      .limit(1); 
 
     return user; 
   }
@@ -103,9 +110,9 @@ export class UsersService {
     await this.db
       .update(users)
       .set({
-        deleted_at: new Date(), 
+        deleted_at: new Date(),
       })
-      .where(eq(users.id, id)); 
+      .where(eq(users.id, id))
 
     return {
       message: "User Removed",

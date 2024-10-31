@@ -7,9 +7,10 @@ export const users = mysqlTable('users',{
   uni_id: varchar('uni_id', {length: 255}).unique().notNull(),
   email: varchar('email', { length: 255 }).unique().notNull(),
   image: varchar('image', { length: 255 }).notNull(),
-  role: varchar('role', { length: 255 }).notNull().default('resident'),
+  role: varchar('role', { length: 255 }).notNull().default('student'),
   gender: boolean('gender').notNull().default(true), //true = male, false = female
   has_deposit: boolean('has_deposit').notNull().default(false),
+  access_token: varchar('access_token', { length: 255 }),
   created_at: timestamp('created_at').notNull().defaultNow(),
   updated_at: timestamp('updated_at').notNull().defaultNow(),
   deleted_at: timestamp('deleted_at'),

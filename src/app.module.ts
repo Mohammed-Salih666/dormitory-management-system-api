@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { ApartmentsModule } from './apartments/apartments.module';
 import { ReservationsModule } from './reservations/reservations.module';
 import { InspectionsModule } from './inspections/inspections.module';
+import { AuthModule } from './auth/auth.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -20,6 +21,7 @@ import databaseConfig from './config/database.config';
     ApartmentsModule,
     ReservationsModule,
     InspectionsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
