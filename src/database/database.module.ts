@@ -11,11 +11,11 @@ import * as schema from './schema';
       provide: MYSQL_CONNECTION,
       inject: [ConfigService], 
       useFactory: async (configService: ConfigService) => {
-        const host = configService.get<string>('DB_HOST');
-        const user = configService.get<string>('DB_USERNAME');
-        const database = configService.get<string>('DB_NAME');
-        const password = configService.get<string>('DB_PASSWORD');
-        const port = configService.get<number>('DB_PORT');
+        const host = configService.get<string>('DATABASE_HOST');
+        const user = configService.get<string>('DATABASE_USERNAME');
+        const database = configService.get<string>('DATABASE_NAME');
+        const password = configService.get<string>('DATABASE_PASSWORD');
+        const port = configService.get<number>('DATABASE_PORT');
         
         const pool = createPool({
           host,
