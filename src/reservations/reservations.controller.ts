@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
+import { reservations } from 'src/database/schema';
 
 @Controller('reservations')
 export class ReservationsController {
@@ -14,7 +15,7 @@ export class ReservationsController {
     return this.reservationService.findAll();
   }
 
-  @Get(':user_id')
+  @Get('user_id/:user_id')
   findOne(@Param('user_id') userId: string) {
     return this.reservationService.findOne(+userId);
   }
@@ -25,8 +26,8 @@ export class ReservationsController {
   }
 
   @Patch(':id/update')
-  update(@Param('id') id: string, @Body() dto: Partial<CreateReservationDto>) {
-    return this.reservationService.update(+id, dto);
+  update(@Param('id') id: string, @Body() dto: Partial<typeof reservations.$inferSelect>) {
+    return this.reservationService.update(+id, dto); 
   }
 
   @Delete(':id/remove')

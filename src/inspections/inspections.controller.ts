@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common';
 import { InspectionsService } from './inspections.service';
 import { CreateInspectionDto } from './dto/create-inspection.dto';
+import { inspections } from 'src/database/schema';
 
 @Controller('inspections')
 export class InspectionsController {
@@ -23,12 +24,12 @@ export class InspectionsController {
     return this.inspectionsService.create(dto);
   }
 
-  @Patch('update')
-  update(@Param('id') id: string, @Body() dto: Partial<CreateInspectionDto>) {
+  @Patch(':id/update')
+  update(@Param('id') id: string, @Body() dto: Partial<typeof inspections.$inferSelect>) {
     return this.inspectionsService.update(+id, dto);
   }
 
-  @Delete('remove')
+  @Delete(':id/remove')
 
   remove(@Param('id') id: string) {
     return this.inspectionsService.remove(+id);

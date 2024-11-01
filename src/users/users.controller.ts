@@ -20,8 +20,8 @@ export class UsersController {
     return this.userService.findOne(+id);
   }
 
-  @Get('uni_id/:uniId')
-  async findByUniId(@Param('uniId') id: string) {
+  @Get('uni_id/:uni_id')
+  async findByUniId(@Param('uni_id') id: string) {
     return this.userService.findByUniId(id);
   }
 
