@@ -73,9 +73,12 @@ export const reservations = mysqlTable('reservations', {
   deleted_at: timestamp('deleted_at'),
 }); 
 
-export const reservationsRelations = relations(reservations, ({many}) => ({
+export const reservationsRelations = relations(reservations, ({one, many}) => ({
   user: many(users),
-  room: many(rooms),
+  room: one(rooms, {
+    fields: [reservations.room_id],
+    references: [rooms.id],
+  }),
 })); 
 
 export const inspections = mysqlTable('inspections', {
