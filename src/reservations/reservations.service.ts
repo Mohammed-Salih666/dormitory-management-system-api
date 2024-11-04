@@ -18,10 +18,43 @@ export class ReservationsService {
    * @returns An array of all reservations in the database.
    */
   async findAll() {
-    const allReservations = await this.db
-      .select()
-      .from(reservations)
-      .where(isNull(reservations.deleted_at));
+
+    const allReservations = await this.db.query.reservations.findMany({
+      where: isNull(reservations.deleted_at),
+      columns: {
+        created_at: true,
+        semester: true,
+        year: true,
+        status: true,
+      },
+      with: {
+        user: {
+          columns: {
+            access_token: false,
+            created_at: false,
+            updated_at: false,
+            deleted_at: false,
+          }
+        },
+        room: {
+          columns: {
+            created_at: false,
+            updated_at: false,
+            deleted_at: false,
+            apartment_id: false,
+          },
+          with: {
+            apartment: {
+              columns: {
+                created_at: false,
+                updated_at: false,
+                deleted_at: false,
+              }
+            }
+          }
+        },
+      }
+    });
  
     return allReservations;
   }
@@ -35,9 +68,38 @@ export class ReservationsService {
   async findOne(userId: number) {
     const reservation = await this.db.query.reservations.findFirst({
       where: eq(reservations.user_id, userId),
+      columns: {
+        created_at: true,
+        semester: true,
+        year: true,
+        status: true,
+      },
       with: {
-        room: true,
-        user: true,
+        user: {
+          columns: {
+            access_token: false,
+            created_at: false,
+            updated_at: false,
+            deleted_at: false,
+          }
+        },
+        room: {
+          columns: {
+            created_at: false,
+            updated_at: false,
+            deleted_at: false,
+            apartment_id: false,
+          },
+          with: {
+            apartment: {
+              columns: {
+                created_at: false,
+                updated_at: false,
+                deleted_at: false,
+              }
+            }
+          }
+        },
       }
     }); 
 
