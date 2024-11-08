@@ -29,7 +29,6 @@ export class AuthService {
       .values({
         ...dto,
         uni_id,
-        image: 'https://test.com',
       }); 
 
     return true; 
@@ -53,6 +52,6 @@ export class AuthService {
       })
       .where(eq(schema.users.id, user.id));
 
-    return true; 
+    return user; 
   }
 }

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { MySql2Database } from 'drizzle-orm/mysql2';
 import { MYSQL_CONNECTION } from 'src/constants';
 import * as schema from '../database/schema';
@@ -65,9 +65,19 @@ export class ReservationsService {
    * @param userId The user ID for which the reservation should be retrieved.
    * @returns The reservation matching the specified user ID.
    */
-  async findOne(userId: number) {
+  async findOne(userUniId: string) {
+
+    const user = await this.db.query.users.findFirst({
+      where: eq(schema.users.uni_id, userUniId),
+    });   
+    console.log(user);
+
+    if(!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
     const reservation = await this.db.query.reservations.findFirst({
-      where: eq(reservations.user_id, userId),
+      where: eq(reservations.user_id, user.id),
       columns: {
         created_at: true,
         semester: true,
@@ -113,9 +123,21 @@ export class ReservationsService {
    * @returns An object with a message indicating the reservation creation status.
    */
   async create(dto: CreateReservationDto) {
+
+    const user = await this.db.query.users.findFirst({
+      where: eq(schema.users.uni_id, dto.user_uni_id),
+    }); 
+
+    if(!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    
     await this.db
       .insert(reservations)
-      .values(dto); 
+      .values({
+        ...dto,
+        user_id: user.id
+      }); 
 
     return {
       message: "Reservation Created"

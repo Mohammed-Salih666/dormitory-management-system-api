@@ -10,15 +10,13 @@ export class ApartmentsController {
 
   @Get()
   async findAll(@Query('gender') gender: string = 'M') { 
-    const forMale = gender === 'M' ? true : false; 
 
-    return this.apartmentService.findAll(forMale);
+    return this.apartmentService.findAll(gender);
   }
 
   @Get('floor/:floor/number/:number')
   async findOne(@Param('floor') floor: string, @Param('number') number: string, @Query('gender') gender: string = 'M') {
-    const forMale = gender === 'M' ? true : false; 
-    return this.apartmentService.findOne(floor, +number, forMale)
+    return this.apartmentService.findOne(floor, +number, gender)
   }
 
   @Get('floor/:floor/number/:number/rooms')
@@ -28,8 +26,7 @@ export class ApartmentsController {
 
   @Get('available')
   async findAvailableRooms(@Query('gender') gender: string = 'M') {
-    const forMale = gender === 'M' ? true : false;
-    return this.apartmentService.findAvailableRooms(forMale);
+    return this.apartmentService.findAvailableRooms(gender);
   }
 
   @Post('create')

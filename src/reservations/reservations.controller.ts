@@ -17,7 +17,7 @@ export class ReservationsController {
 
   @Get('user_id/:user_id')
   findOne(@Param('user_id') userId: string) {
-    return this.reservationService.findOne(+userId);
+    return this.reservationService.findOne(userId);
   }
 
   @Post('create')

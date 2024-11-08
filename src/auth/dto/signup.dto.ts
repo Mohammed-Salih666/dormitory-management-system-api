@@ -10,6 +10,6 @@ export class signUpDto {
   email: string;
   
   @IsNotEmpty()
-  @IsBoolean()
-  gender: boolean; 
+  @IsString()
+  gender: string; 
 }

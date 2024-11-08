@@ -11,7 +11,7 @@ export class CreateApartmentDto {
 
   @IsBoolean()
   @IsNotEmpty()
-  for_male: boolean;
+  gender: string;
 
   @IsString()
   @IsNotEmpty()

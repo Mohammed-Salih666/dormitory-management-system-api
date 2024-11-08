@@ -1,0 +1,1 @@
+ALTER TABLE `users` MODIFY COLUMN `gender` varchar(1) NOT NULL;

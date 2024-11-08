@@ -15,6 +15,10 @@ export class CreateUserDto {
   @IsNotEmpty()
   email: string; 
 
+  @IsString()
+  @IsNotEmpty()
+  gender: string;
+
   @IsUrl()
   image: string; 
 

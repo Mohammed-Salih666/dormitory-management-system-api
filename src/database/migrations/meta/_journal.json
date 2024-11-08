@@ -15,6 +15,62 @@
       "when": 1730360570124,
       "tag": "0001_complete_fenris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1731096966495,
+      "tag": "0002_brave_nova",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1731097394987,
+      "tag": "0003_fantastic_metal_master",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1731097593899,
+      "tag": "0004_brown_blue_marvel",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1731098067980,
+      "tag": "0005_stiff_whizzer",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1731098496439,
+      "tag": "0006_safe_reptil",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1731098836510,
+      "tag": "0007_gifted_ultimatum",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1731098983464,
+      "tag": "0008_aspiring_grey_gargoyle",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1731099033241,
+      "tag": "0009_magical_dazzler",
+      "breakpoints": true
     }
   ]
 }

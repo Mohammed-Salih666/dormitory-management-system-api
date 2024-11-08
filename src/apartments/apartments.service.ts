@@ -17,7 +17,7 @@ export class ApartmentsService {
     private readonly db: MySql2Database<typeof schema>, 
   ){}
 
-  async findAll(forMale: boolean) {
+  async findAll(gender: string) {
   /**
    * Retrieves all apartments for the given gender.
    * @param forMale Whether the apartments are for males or not.
@@ -27,7 +27,7 @@ export class ApartmentsService {
       .select()
       .from(apartments)
       .where(
-        eq(apartments.for_male, forMale)
+        eq(apartments.gender, gender)
       ); 
 
     return allApartments; 
@@ -42,7 +42,7 @@ export class ApartmentsService {
    * @param forMale A boolean indicating if the apartment is for males.
    * @returns The apartment matching the specified criteria.
    */
-  async findOne(floor: string, apartmentNumber: number, forMale: boolean) {
+  async findOne(floor: string, apartmentNumber: number, gender: string) {
     const apartment = await this.db
     .select()
     .from(apartments)
@@ -50,7 +50,7 @@ export class ApartmentsService {
       and(
         eq(apartments.floor, floor), 
         eq(apartments.number, apartmentNumber),
-        eq(apartments.for_male, forMale),
+        eq(apartments.gender, gender),
       )
     ); 
     
@@ -86,9 +86,10 @@ export class ApartmentsService {
    * @param gender A boolean indicating if the rooms are for males.
    * @returns An array of all available rooms for the given gender.
    */
-  async findAvailableRooms(gender: boolean) {
+  async findAvailableRooms(gender: string) {
+
     const rooms = await this.db.query.apartments.findMany({
-      where: eq(apartments.for_male, gender),
+      where: eq(apartments.gender, gender),
       with: {
         rooms: {
           where: eq(schema.rooms.is_available, true),
