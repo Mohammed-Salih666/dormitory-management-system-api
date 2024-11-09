@@ -64,56 +64,49 @@ export class ReservationsService {
    * 
    * @param userId The user ID for which the reservation should be retrieved.
    * @returns The reservation matching the specified user ID.
-   */
-  async findOne(userUniId: string) {
-
-    const user = await this.db.query.users.findFirst({
+  */
+ async findOne(userUniId: string) {
+   
+   const excludedColumns = {
+     created_at: false, 
+     updated_at: false, 
+     deleted_at: false,
+   }
+   const userWithReservation = await this.db.query.users.findFirst({
       where: eq(schema.users.uni_id, userUniId),
-    });   
-    console.log(user);
-
-    if(!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-
-    const reservation = await this.db.query.reservations.findFirst({
-      where: eq(reservations.user_id, user.id),
       columns: {
-        created_at: true,
-        semester: true,
-        year: true,
-        status: true,
+        ...excludedColumns,
+        access_token: false,
       },
       with: {
-        user: {
+        reservation: {
           columns: {
-            access_token: false,
-            created_at: false,
-            updated_at: false,
-            deleted_at: false,
-          }
-        },
-        room: {
-          columns: {
-            created_at: false,
-            updated_at: false,
-            deleted_at: false,
-            apartment_id: false,
+            ...excludedColumns
           },
           with: {
-            apartment: {
+            room: {
               columns: {
-                created_at: false,
-                updated_at: false,
-                deleted_at: false,
+                ...excludedColumns
+              },
+              with: {
+                apartment: {
+                  columns: {
+                    ...excludedColumns
+                  }
+                },
               }
             }
           }
-        },
+        }
       }
-    }); 
+    });   
 
-    return reservation; 
+    if(!userWithReservation) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return userWithReservation
+
   }
 
   /**
